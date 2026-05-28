@@ -40,6 +40,46 @@ describe('Formulário de Consultoria', () => {
             .should('be.checked')
         })
 
+        cy.get('input[type="file"]')
+            .selectFile('./cypress/fixtures/document.pdf', { force: true })
+
+        cy.get('textarea[placeholder="Descreva mais detalhes sobre sua necessidade"]')
+            .type("Testando")
+
+
+        const techs =[
+            'Cypress',
+            'Selenium',
+            'WebDriverIO',
+            'Playwright',
+            'RoblotFrameWork'
+        ]
+
+        techs.forEach((tech) => {
+            cy.get('input[placeholder="Digite uma tecnologia e pressione Enter"]')
+            .type(tech)
+            .type('{enter}')
+
+            cy.contains('label', 'Tecnologias')
+            .parent()
+            .contains('span', tech)
+            .should('be.visible')
+        })
+
+        cy.contains('label','Li e aceito os')
+            .parent()
+            .find('input')
+            .check()
+            .should('be.checked')
+
+        cy.contains('button', 'Enviar formulário')
+            .click()
+
+        cy.wait(1000)
+
+        cy.contains('Sua solicitação de consultoria foi enviada com sucesso! Em breve, nossa equipe entrará em contato através do email fornecido.')
+            .should('be.visible')
+
 
     })
 
